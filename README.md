@@ -3,9 +3,9 @@
 An app to provide all the Competitive Competitions happening around the world. It was created using Flutter.\
 We have 3 Screens in the App. Live, Upcoming and About.\
 __Live__ shows all the competitions which are live now, along with it's starting time and time left.\
-__Upcoming__ shows all the competitions which will happen in future, along with it's starting time and time left.\
-* In both, the competitions are arranged by the sites hosting it, which are then arranged in the ascending order of lime left.\
+__Upcoming__ shows all the competitions which will happen in future, along with it's starting time and time left.
 __About__ page shows about info.\
+NOTE: In both, the competitions are arranged by the sites hosting it, which are then arranged in the ascending order of lime left.\
 Already built apk can be downloaded from [here](bit.ly/CpLiSt).
 
 ## Contribute
