@@ -8,7 +8,7 @@ __Upcoming__ shows all the competitions which will happen in future, along with 
 __About__ page shows about info.\
 \
 NOTE: In both, the competitions are arranged by the sites hosting it, which are then arranged in the ascending order of lime left.\
-Already built apk can be downloaded from [here](https://bit.ly/CpLiSt).
+Already built apk can be downloaded from [here](https://bit.ly/Cp-LiSt).
 
 ## Contribute
 All contributions and feedbacks are welcomed. Feel free to open an issue and try this app.
