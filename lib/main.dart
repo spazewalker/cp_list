@@ -6,22 +6,20 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
-
 launch(String url) async {
-        if (await canLaunch(url)) {
-          await launch(url);
-        } else {
-          throw 'Could not launch $url';
-        }
+  if (await canLaunch(url)) {
+    await launch(url);
+  } else {
+    throw 'Could not launch $url';
+  }
 }
+
 void main() => runApp(Home());
 
 class Home extends StatefulWidget {
-  Home({Key key, this.title, this.analytics, this.observer}) : super(key: key);
-
-  final String title;
-  final FirebaseAnalytics analytics;
-  final FirebaseAnalyticsObserver observer;
+  static FirebaseAnalytics analytics = FirebaseAnalytics();
+  static FirebaseAnalyticsObserver observer =
+      FirebaseAnalyticsObserver(analytics: analytics);
   @override
   _HomeState createState() => _HomeState(analytics, observer);
 }
@@ -35,13 +33,13 @@ class _HomeState extends State<Home> {
 
   Future<void> _logAppUsage() async {
     await analytics.logEvent(
-      name: 'User Logged',
+      name: 'User_Logged',
       parameters: <String, dynamic>{
-        'Message': 'User open the app',
+        'Message': 'User opened the app',
       },
     );
   }
-  
+
   Future<void> _logAppPage() async {
     await analytics.logEvent(
       name: 'Page',
@@ -55,10 +53,12 @@ class _HomeState extends State<Home> {
   Future<Contests> con = DataLoader().getFuture();
   Contests data;
   int _selectedIndex = 1;
+  bool flag = false;
 
   void onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
+      _logAppPage();
     });
   }
 
@@ -68,6 +68,10 @@ class _HomeState extends State<Home> {
 
   void _onValue(Contests tmp) {
     data = tmp;
+    if (!flag) {
+      showInSnackBar();
+      flag = true;
+    }
     onItemTapped(_selectedIndex);
   }
 
@@ -80,6 +84,7 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
+    _logAppUsage();
     _firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
         print("onMessage: $message");
@@ -104,13 +109,29 @@ class _HomeState extends State<Home> {
         const IosNotificationSettings(sound: true, badge: true, alert: true));
   }
 
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
+  void showInSnackBar() {
+    _scaffoldKey.currentState.showSnackBar(new SnackBar(
+        backgroundColor: Colors.teal[300],
+        elevation: 1.5,
+        behavior: SnackBarBehavior.floating,
+        duration: Duration(seconds: 6),
+        content: new Text(
+            "Long Press any item in Upcoming page to add it to your Calender",
+            style: TextStyle(color: Colors.black,),
+            )));
+  }
+
   @override
   Widget build(BuildContext context) {
     getData(con);
     return MaterialApp(
+      theme: ThemeData.dark(),
       home: Scaffold(
+        key: _scaffoldKey,
         appBar: AppBar(
-          leading: Center(child: Icon(Icons.code, color: Colors.black)),
+          leading: Center(child: Icon(Icons.code, color: Colors.white38)),
           title: Text("CP LIST"),
           backgroundColor: Colors.black54,
         ),
@@ -131,7 +152,7 @@ class _HomeState extends State<Home> {
             ),
           ],
           currentIndex: _selectedIndex,
-          selectedItemColor: Colors.amber[800],
+          selectedItemColor: Colors.teal[300],
           onTap: onItemTapped,
         ),
       ),
@@ -152,45 +173,98 @@ Widget buildPage(Contests contests, int pageId) {
 
 Widget upcomingPage(Contests contests) {
   if (contests != null) {
-    return Scrollbar(
+    if(isnormal){
+      return Scrollbar(
+      child: new ListView.builder(
+        itemCount: contests.u.length,
+        physics: AlwaysScrollableScrollPhysics(),
+        itemBuilder: (context, index) {
+          final count = index;
+          return elementl(contests.u[count]);
+        },
+      ),
+    );
+    }
+    else{return Scrollbar(
       child: new ListView.builder(
         itemCount: contests.upcomingEvents.length,
         physics: AlwaysScrollableScrollPhysics(),
         itemBuilder: (context, index) {
           final count = index;
-          return element(contests.upcomingEvents[count]);
+          return elementl(contests.upcomingEvents[count]);
         },
       ),
-    );
+    );}
   } else
     return Center(child: CircularProgressIndicator());
 }
 
+// Widget livePage(Contests contests) {
+//   if (contests != null) {
+//     return Scrollbar(
+//       child: new ListView.builder(
+//           itemCount: contests.liveEvents.length,
+//           physics: AlwaysScrollableScrollPhysics(),
+//           itemBuilder: (context, index) {
+//             final count = index;
+
+//             return element(contests.liveEvents[count]);
+//           }),
+//     );
+//   } else
+//     return Center(child: CircularProgressIndicator());
+// }
+
 Widget livePage(Contests contests) {
   if (contests != null) {
-    return Scrollbar(
+    if(isnormal){return Scrollbar(
       child: new ListView.builder(
           itemCount: contests.liveEvents.length,
           physics: AlwaysScrollableScrollPhysics(),
           itemBuilder: (context, index) {
             final count = index;
+            
+            return element(contests.l[count]);
+          }),
+    );}
+    else
+    {return Scrollbar(
+      child: new ListView.builder(
+          itemCount: contests.liveEvents.length,
+          physics: AlwaysScrollableScrollPhysics(),
+          itemBuilder: (context, index) {
+            final count = index;
+            
             return element(contests.liveEvents[count]);
           }),
-    );
+    );}
   } else
     return Center(child: CircularProgressIndicator());
 }
 
+bool isnormal = false;
+
+changed(bool value){
+  isnormal = value;
+}
+
 Widget aboutPage() {
   return Container(
-      padding: EdgeInsets.fromLTRB(18, 50, 18, 0),
+      padding: EdgeInsets.fromLTRB(18, 20, 18, 0),
+      constraints: BoxConstraints(maxHeight: double.infinity),
       child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
+            Row(mainAxisAlignment: MainAxisAlignment.center,children: [Text("Normal Sorting"),Container(width: 10),Switch(value: isnormal, onChanged: changed)]),
+            Container(height: 50,child: Center(child: Text("\"Normal Sorting\" refers to arranging the events by their starting time.",textAlign: TextAlign.center,)),),
+            Container(height: 50,child: Center(child: Text("This Preference is not retained, as we are not using the local storage",textAlign: TextAlign.center,)),),
+            Divider(color: Colors.white,endIndent: 5,),
+            Container(constraints: BoxConstraints(maxHeight: 10),),
+            Container(height: 20,),
             Text(
-              "CP List is an App build just to provide all the online coding competitions happening around the world at your fingertips.\n\nWe Included all the major Sites from around the world, with relevent tags.\n\nThis app is developed using Flutter.\n\nCreated by Shivanshu Tyagi.\n\nMade with 🧡 in India!",
+              "CP List is an App build just to provide all the online coding competitions happening around the world at your fingertips.\n\nWe Included all the major Sites from around the world, with relevent tags.\n\nYou can add these events in your Calender by long-pressing on the event in Upcoming tab.\n\nThis app is developed using Flutter.\n\nCreated by Shivanshu Tyagi.\n\nMade with 🧡 in India!",
               textAlign: TextAlign.center,
               softWrap: true,
               textScaleFactor: 1.1,

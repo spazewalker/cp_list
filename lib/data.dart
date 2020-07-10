@@ -3,21 +3,8 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
-// import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:add_2_calendar/add_2_calendar.dart';
 
-
-@immutable
-class Message {
-  final String title;
-  final String body;
-
-  const Message({
-    @required this.title,
-    @required this.body,
-  });
-}
-
-String sortMethod = "sites";
 
 class DataLoader {
   String _url =
@@ -77,7 +64,7 @@ class Contest {
       this.end = DateTime.tryParse(jsonMap["end"]);
       this.duration = DateTime.tryParse(jsonMap["duration"]);
     } catch (e) {
-      print(e);
+      // print(e);
     }
     if (DateTime.now().compareTo(this.start) > 0) {
       this.isLive = true;
@@ -90,6 +77,14 @@ class Contest {
       this.color = Colors.brown.shade300;
     else if (this.site == 'hackerearth.com')
       this.color = Colors.indigo.shade300;
+    else if (this.site == 'spoj.com')
+      this.color = Colors.deepOrange.shade100;
+    else if (this.site == 'ctftime.org')
+      this.color = Colors.grey.shade400;
+    else if (this.site == 'e-olymp.com')
+      this.color = Colors.cyan.shade500;
+    else if (this.site == 'projecteuler.net')
+      this.color = Colors.purpleAccent.shade200;
     else if (this.site == 'codeforces.com')
       this.color = Colors.red.shade300;
     else if (this.site == 'codingcompetitions.withgoogle.com') {
@@ -106,6 +101,8 @@ class Contests {
   List<Contest> events;
   List<Contest> liveEvents;
   List<Contest> upcomingEvents;
+  List<Contest> l=[];
+  List<Contest> u=[];
 
   List<Contest> topcoder = [],
       codechef = [],
@@ -113,13 +110,21 @@ class Contests {
       codeforces = [],
       google = [],
       kaggle = [],
-      other = [];
-  List<Contest> topcoderl = [],
+      ctftime = [],
+      spoj = [],
+      eolymp = [],
+      other = [],
+      topcoderl = [],
       codechefl = [],
+      pe = [],
       hackerearthl = [],
       codeforcesl = [],
       googlel = [],
       kagglel = [],
+      ctftimel = [],
+      spojl = [],
+      pel = [],
+      eolympl = [],
       otherl = [];
 
   Contests.fromJson(String jsonStr) {
@@ -129,6 +134,8 @@ class Contests {
     final _objects = _map['objects'];
     for (var i = 0; i < this.meta.total_count; i++) {
       this.events.add(new Contest.fromJson(_objects[i]));
+      if(this.events.last.isLive){this.l.add(this.events.last);}
+      if(!this.events.last.isLive){this.u.add(this.events.last);}
     }
     for (var i = 0; i < meta.total_count; i++) {
       if (events[i].isLive == false) {
@@ -144,6 +151,14 @@ class Contests {
           codeforces.add(events[i]);
         else if (events[i].site == 'Google')
           google.add(events[i]);
+        else if (events[i].site == 'ctftime.org')
+          ctftime.add(events[i]);
+        else if (events[i].site == 'spoj.com')
+          spoj.add(events[i]);
+        else if (events[i].site == 'projecteuler.net')
+          pe.add(events[i]);
+        else if (events[i].site == 'e-olymp.com')
+          eolymp.add(events[i]);
         else
           other.add(events[i]);
       } else {
@@ -159,6 +174,14 @@ class Contests {
           codeforcesl.add(events[i]);
         else if (events[i].site == 'Google')
           googlel.add(events[i]);
+        else if (events[i].site == 'ctftime.org')
+          ctftimel.add(events[i]);
+        else if (events[i].site == 'spoj.com')
+          spojl.add(events[i]);
+        else if (events[i].site == 'projecteuler.net')
+          pel.add(events[i]);
+        else if (events[i].site == 'e-olymp.com')
+          eolympl.add(events[i]);
         else
           otherl.add(events[i]);
       }
@@ -169,6 +192,10 @@ class Contests {
         codechef +
         topcoder +
         kaggle +
+        ctftime+
+        spoj+
+        pe+
+        eolymp+
         other;
     liveEvents = codeforcesl +
         googlel +
@@ -176,28 +203,18 @@ class Contests {
         codechefl +
         topcoderl +
         kagglel +
+        ctftimel+
+        spojl+
+        pel+
+        eolympl+
         otherl;
   }
 }
 
-  // logNotification(Contest contest) async {
-  //   await analytics.logEvent(
-  //     name: 'Notification',
-  //     parameters: <String, dynamic>{
-  //       'Message': 'user wants notification for this',
-  //       'time': contest.start,
-  //       'link' : contest.href,
-  //       'name' : contest.event,
-  //     },
-  //   );
-  // }
-
-// final FirebaseAnalytics analytics;
-
-Card element(Contest contest) {
+Card elementl(Contest contest) {
   return Card(
     elevation: 2.0,
-    color: Colors.white,
+    color: Colors.black45,
     child: OutlineButton(
       onPressed: () async {
         String url = contest.href;
@@ -208,7 +225,59 @@ Card element(Contest contest) {
           throw 'Could not launch $url';
         }
       },
-      // onLongPress: logNotification(contest) ,
+      onLongPress: (){
+        final Event event = Event(
+            title: contest.event,
+            description: 'Coding Compitition added by cp_list app.',
+            location: contest.href,
+            startDate: contest.start,
+            endDate: contest.end,
+          );
+      Add2Calendar.addEvent2Cal(event);
+      } ,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          ListTile(
+            contentPadding: EdgeInsets.all(10),
+            leading: Icon(Icons.laptop_mac),
+            title: Text(contest.event,textScaleFactor: 1.1,),
+          ),
+          ListTile(
+            title: Text(getStringtoPrintl(contest)),
+            trailing: Container(
+              decoration: BoxDecoration(
+                  color: contest.color,
+                  borderRadius: BorderRadius.all(Radius.circular(20))),
+              padding: EdgeInsets.all(5),
+              child: Text(
+                contest.site,
+                softWrap: false,
+                style: TextStyle(color: Colors.black),
+                textScaleFactor: 0.8,
+              ),
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
+Card element(Contest contest) {
+  return Card(
+    elevation: 2.0,
+    color: Colors.black45,
+    child: OutlineButton(
+      onPressed: () async {
+        String url = contest.href;
+
+        if (await canLaunch(url)) {
+          await launch(url, forceSafariVC: false);
+        } else {
+          throw 'Could not launch $url';
+        }
+      },
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
@@ -227,6 +296,7 @@ Card element(Contest contest) {
               child: Text(
                 contest.site,
                 softWrap: false,
+                style: TextStyle(color: Colors.black),
                 textScaleFactor: 0.8,
               ),
             ),
@@ -237,20 +307,30 @@ Card element(Contest contest) {
   );
 }
 
+String getStringtoPrintl(Contest contest) {
+  if (int.parse(timeLeft(contest.end).split(' ')[0]) < 0) {
+    return "Contest Ended";
+  } else
+    return ('Starts at: ' +
+        printTime(contest.start) +
+        '\nStarts in: ' +
+        timeLeft(contest.start));
+}
+
 String getStringtoPrint(Contest contest) {
   if (int.parse(timeLeft(contest.end).split(' ')[0]) < 0) {
     return "Contest Ended";
   } else
     return ('Started at: ' +
         printTime(contest.start) +
-        '\nTime Left: ' +
+        '\nEnds in: ' +
         timeLeft(contest.end));
 }
 
 String timeLeft(DateTime endTime) {
   Duration duration = endTime.difference(DateTime.now());
   if (duration > Duration(hours: 24)) {
-    return duration.inDays.toString() + " days";
+    return duration.inDays.toString() + " days "+(duration.inHours%24).toString() + " hrs";
   } else if (duration > Duration(minutes: 60)) {
     return (duration.inHours).toString() +
         " hr " +

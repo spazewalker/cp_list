@@ -27,6 +27,7 @@ dependencies:
   firebase_core: ^0.4.0+9
   firebase_analytics: ^5.0.2
   firebase_messaging: ^6.0.16
+  add_2_calendar: ^1.4.0
 
 dev_dependencies:
   flutter_test:
