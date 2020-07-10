@@ -4,7 +4,7 @@ An app to provide all the Competitive Competitions happening around the world. I
 We have 3 Pages in the App. Live, Upcoming and About.\
 \
 __Live__ shows all the competitions which are live now, along with it's starting time and time left.\
-![Live Page](/live.jpg)\
+![Live Page](/live.jpg | width=20)\
 __Upcoming__ shows all the competitions which will happen in future, along with it's starting time and time left.\
 ![upcoming Page](/upcoming.jpg)\
 __About__ page shows about info.\
