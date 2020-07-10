@@ -6,7 +6,7 @@ We have 3 Pages in the App. Live, Upcoming and About.\
 __Live__ shows all the competitions which are live now, along with it's starting time and time left.\
 __Upcoming__ shows all the competitions which will happen in future, along with it's starting time and time left.\
 __About__ page shows about info.\
-<img src="/upcoming.jpg" width="200" alt="Upcoming Page"> &nbsp;&nbsp; <img src="/live.jpg" width="200" alt="Live Page"> &nbsp;&nbsp; <img src="/about.jpg" width="200" alt="About Page"> \
+<img src="/upcoming.jpg" width="250" alt="Upcoming Page"> &nbsp;&nbsp; <img src="/live.jpg" width="250" alt="Live Page"> &nbsp;&nbsp; <img src="/about.jpg" width="250" alt="About Page"> \
 Already built apk can be downloaded from [here](https://bit.ly/Cp-LiS).
 
 ## Features
