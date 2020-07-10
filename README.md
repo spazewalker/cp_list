@@ -7,7 +7,7 @@ __Live__ shows all the competitions which are live now, along with it's starting
 __Upcoming__ shows all the competitions which will happen in future, along with it's starting time and time left.\
 __About__ page shows about info.\
 <img src="/upcoming.jpg" width="200">  <img src="/live.jpg" width="200">  <img src="/about.jpg" width="200"> \
-__Upcoming__    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     __Live__    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;      __About__ \
+__Upcoming__&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;__Live__&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; __About__ \
 Already built apk can be downloaded from [here](https://bit.ly/Cp-LiS).
 
 ## Features
