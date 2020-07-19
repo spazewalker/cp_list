@@ -90,19 +90,19 @@ class _HomeState extends State<Home> {
         print("onMessage: $message");
         String url = message['data'].link;
         print(url);
-        launch(url);
+        await launch(url);
       },
       onLaunch: (Map<String, dynamic> message) async {
         print("onLaunch: $message");
         String url = message['data']['link'].link;
         print(url);
-        launch(url);
+        await launch(url);
       },
       onResume: (Map<String, dynamic> message) async {
         print("onResume: $message");
         String url = message['data']['link'].link;
         print(url);
-        launch(url);
+        await launch(url);
       },
     );
     _firebaseMessaging.requestNotificationPermissions(

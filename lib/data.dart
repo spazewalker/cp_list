@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ffi';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -238,12 +239,13 @@ Card elementl(Contest contest) {
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           ListTile(
-            contentPadding: EdgeInsets.all(10),
-            leading: Icon(Icons.laptop_mac),
+            contentPadding: EdgeInsets.fromLTRB(10,6,10,1),
+            leading: Icon(Icons.laptop_mac,color: Colors.white70,),
             title: Text(contest.event,textScaleFactor: 1.1,),
           ),
           ListTile(
-            title: Text(getStringtoPrintl(contest),textScaleFactor: 0.8,),
+            title: Text(getStringtoPrintl(contest),textScaleFactor: 0.8,style: TextStyle(color: Colors.white70),),
+                        contentPadding: EdgeInsets.fromLTRB(10,1,10,8),
             trailing: Container(
               decoration: BoxDecoration(
                   color: contest.color,
@@ -281,12 +283,13 @@ Card element(Contest contest) {
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           ListTile(
-            contentPadding: EdgeInsets.all(10),
-            leading: Icon(Icons.laptop_mac),
+            contentPadding: EdgeInsets.fromLTRB(10, 6, 10, 1),
+            leading: Icon(Icons.laptop_mac,color: Colors.white70,),
             title: Text(contest.event,textScaleFactor: 1.1,),
           ),
           ListTile(
-            title: Text(getStringtoPrint(contest),textScaleFactor: 0.8,),
+                        contentPadding: EdgeInsets.fromLTRB(10, 1, 10, 8),
+            title: Text(getStringtoPrint(contest),textScaleFactor: 0.8,style: TextStyle(color: Colors.white70),),
             trailing: Container(
               decoration: BoxDecoration(
                   color: contest.color,
@@ -348,10 +351,18 @@ String timeLeft(DateTime endTime) {
 }
 
 String duration(Duration duration) {
-  if(duration.inMinutes%60==0){
+  // if(duration.inDays>7){
+  //   if(duration.inDays%7==0)
+  //   return ((duration.inDays/7).truncate()).toString()+" weeks";
+  //   else
+  //   return (duration.inDays/7).toString()+" weeks "+(duration.inDays).toString()+" days";
+  // }else
+  if(duration.inHours>36){
+    return (duration.inDays).toString()+" days";
+  }else if(duration.inMinutes%60==0){
      return (duration.inHours).toString()+" hrs";
   } else {
-     return (duration.inHours).toString()+':'+(duration.inMinutes).toString()+" hrs";
+     return (duration.inHours).toString()+':'+(duration.inMinutes%60).toString()+" hrs";
   }
 }
 
