@@ -1,7 +1,7 @@
 # cp_list
 
 An app to provide all the Competitive Competitions happening around the world. It was created using Flutter.\
-We have 3 Pages in the App. Live, Upcoming and About. [Link to Download Apk ](https://bit.ly/cp_list_r)\
+We have 3 Pages in the App. Live, Upcoming and About. [Link to Download Apk ](https://bit.ly/3johC6O)\
 \
 __Live__ shows all the competitions which are live now, along with it's starting time and time left.\
 __Upcoming__ shows all the competitions which will happen in future, along with it's starting time and time left.\
@@ -9,7 +9,7 @@ __About__ page shows about info.\
 \
 <img src="/upcoming.jpg" width="250" alt="Upcoming Page"> &nbsp;&nbsp; <img src="/live.jpg" width="250" alt="Live Page"> &nbsp;&nbsp; <img src="/about.jpg" width="250" alt="About Page"> \
 \
-Already built apk can be downloaded from [here](https://bit.ly/cp_list_r).
+Already built apk can be downloaded from [here](https://bit.ly/3johC6O).
 
 ## Features
 * Sorting of the events in two different ways. Sort by time( Normal Sorting ) and group by Site.
