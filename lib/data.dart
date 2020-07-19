@@ -60,13 +60,12 @@ class Contest {
       this.site = jsonMap['resource']['name'];
     } catch (e) {}
     try {
-      this.start = DateTime.tryParse(jsonMap["start"]);
-      this.end = DateTime.tryParse(jsonMap["end"]);
-      this.duration = DateTime.tryParse(jsonMap["duration"]);
+      this.start = DateTime.tryParse(jsonMap["start"]+'Z').toLocal();
+      this.end = DateTime.tryParse(jsonMap["end"]+'Z').toLocal();
     } catch (e) {
       // print(e);
     }
-    if (DateTime.now().compareTo(this.start) > 0) {
+    if (DateTime.now().compareTo(this.start.toLocal()) > 0) {
       this.isLive = true;
     }
     if (this.site == 'topcoder.com')
@@ -230,8 +229,8 @@ Card elementl(Contest contest) {
             title: contest.event,
             description: 'Coding Compitition added by cp_list app.',
             location: contest.href,
-            startDate: contest.start,
-            endDate: contest.end,
+            startDate: contest.start.toLocal(),
+            endDate: contest.end.toLocal(),
           );
       Add2Calendar.addEvent2Cal(event);
       } ,
@@ -244,7 +243,7 @@ Card elementl(Contest contest) {
             title: Text(contest.event,textScaleFactor: 1.1,),
           ),
           ListTile(
-            title: Text(getStringtoPrintl(contest)),
+            title: Text(getStringtoPrintl(contest),textScaleFactor: 0.8,),
             trailing: Container(
               decoration: BoxDecoration(
                   color: contest.color,
@@ -287,7 +286,7 @@ Card element(Contest contest) {
             title: Text(contest.event,textScaleFactor: 1.1,),
           ),
           ListTile(
-            title: Text(getStringtoPrint(contest)),
+            title: Text(getStringtoPrint(contest),textScaleFactor: 0.8,),
             trailing: Container(
               decoration: BoxDecoration(
                   color: contest.color,
@@ -312,9 +311,10 @@ String getStringtoPrintl(Contest contest) {
     return "Contest Ended";
   } else
     return ('Starts at: ' +
-        printTime(contest.start) +
+        printTime(contest.start.toLocal()) +
         '\nStarts in: ' +
-        timeLeft(contest.start));
+        timeLeft(contest.start.toLocal()))+
+        '\nDuration: '+ duration(contest.end.difference(contest.start));
 }
 
 String getStringtoPrint(Contest contest) {
@@ -322,9 +322,10 @@ String getStringtoPrint(Contest contest) {
     return "Contest Ended";
   } else
     return ('Started at: ' +
-        printTime(contest.start) +
+        printTime(contest.start.toLocal()) +
         '\nEnds in: ' +
-        timeLeft(contest.end));
+        timeLeft(contest.end.toLocal()))+
+        '\nDuration: '+ duration(contest.end.difference(contest.start));;
 }
 
 String timeLeft(DateTime endTime) {
@@ -343,6 +344,14 @@ String timeLeft(DateTime endTime) {
         " sec";
   } else {
     return (duration).toString();
+  }
+}
+
+String duration(Duration duration) {
+  if(duration.inMinutes%60==0){
+     return (duration.inHours).toString()+" hrs";
+  } else {
+     return (duration.inHours).toString()+':'+(duration.inMinutes).toString()+" hrs";
   }
 }
 

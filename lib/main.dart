@@ -88,19 +88,19 @@ class _HomeState extends State<Home> {
     _firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
         print("onMessage: $message");
-        String url = message['data']['link'];
+        String url = message['data'].link;
         print(url);
         launch(url);
       },
       onLaunch: (Map<String, dynamic> message) async {
         print("onLaunch: $message");
-        String url = message['data']['link'];
+        String url = message['data']['link'].link;
         print(url);
         launch(url);
       },
       onResume: (Map<String, dynamic> message) async {
         print("onResume: $message");
-        String url = message['data']['link'];
+        String url = message['data']['link'].link;
         print(url);
         launch(url);
       },
